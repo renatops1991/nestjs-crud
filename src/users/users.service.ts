@@ -19,10 +19,19 @@ export class UsersService {
 
   async createAdminUser(createUserDto: CreateUserDto): Promise<User> {
     if (createUserDto.password != createUserDto.passwordConfirmation) {
-      throw new UnprocessableEntityException('As senhas não conferem');
-    } else {
-      return this.userRepository.createUser(createUserDto, UserRole.ADMIN);
+      throw new UnprocessableEntityException('Passwords do not match');
     }
+
+    return this.userRepository.createUser(createUserDto, UserRole.ADMIN);
+
+  }
+
+  async createUser(createUserDto: CreateUserDto): Promise<User> {
+    if (createUserDto.password != createUserDto.passwordConfirmation) {
+      throw new UnprocessableEntityException('Passwords do not match');
+    }
+
+    return this.userRepository.createUser(createUserDto, UserRole.USER);
   }
 
   async findUserById(userId: string): Promise<User> {
@@ -31,32 +40,44 @@ export class UsersService {
     });
 
     if (!user) {
-      throw new NotFoundException('Usuário não encontrado');
+      throw new NotFoundException('User not found');
     }
 
     return user;
   }
 
-  async updateUser(updateUserDto: UpdateUsersDto, id: string): Promise<User> {
-    const user = await this.findUserById(id);
-    const { name, email, role, status } = updateUserDto;
-    user.name = name ? name : user.email;
-    user.email = email ? email : user.email;
-    user.role = role ? role : user.role;
-    user.status = status === undefined ? user.status : status;
+  /* Antigo não testavel
+    async updateUser(updateUserDto: UpdateUsersDto, id: string): Promise<User> {
+      const user = await this.findUserById(id);
+      const { name, email, role, status } = updateUserDto;
+      user.name = name ? name : user.email;
+      user.email = email ? email : user.email;
+      user.role = role ? role : user.role;
+      user.status = status === undefined ? user.status : status;
 
-    try {
-      await user.save();
-      return user;
-    } catch (error) {
-      throw new InternalServerErrorException('Erro ao salvar os dados no banco de dados');
+      try {
+        await user.save();
+        return user;
+      } catch (error) {
+        throw new InternalServerErrorException('Error saving data to the database');
+      }
+    }*/
+
+  async updateUser(updateUserDto: UpdateUsersDto, id: string) {
+    const result = await this.userRepository.update({ id }, updateUserDto);
+
+    if (result.affected < 1) {
+      throw new NotFoundException('User not found');
     }
+
+    const user = await this.findUserById(id);
+    return user;
   }
 
   async deleteUser(userId: string) {
     const result = await this.userRepository.delete({ id: userId });
     if (result.affected === 0) {
-      throw new NotFoundException('Não foi encontrado um usuário com o ID informado');
+      throw new NotFoundException('User not found');
     }
   }
 

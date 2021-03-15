@@ -1,73 +1,59 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
-</p>
+# User management project
+Full user management CRUD done on **NestJs**
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+# Technology used
+- NodeJs v14.16.0
+- NestJs 7.5.6
+- MariaDb 10.5 or Postgresql 13.2
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+# Installation
+- **Clone the repository**
+~~~~
+git clone https://github.com/renatops1991/nestjs-crud.git
+~~~~
 
-## Description
+- **After downloading the repository, enter the project folder and install the dependencies via npm**
+~~~~
+npm install
+~~~~
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- **After installing the dependencies, run the docker-compose lower command to run the project**
+~~~~
+docker-compose up -d
+~~~~
 
-## Installation
+# API Doc
+**Routes**
+- Authentication
+    - Create user to authentication: ` POST: /auth/signup ` <br>
+    **body:**
+      ~~~
+      {
+          "name": "Full Name",
+          "email": "exemple@exemple.com",
+          "password" : "password",
+          "passwordConfirmation": "password"
+      }
+      ~~~
+      
+    - Generator API token: `POST: /auth/signin ` <br>
+        **body**: 
+       ~~~
+      {
+          "email": "exemple@exemple.com",
+          "password" : "password",
+      }
+      ~~~
+      
+    - Returns authenticated user: ` GET: /auth/me `
+    
+# Authenticated endpoints
+The lower endpoints need authentication accuracy to be able to function correctly
 
-```bash
-$ npm install
-```
-
-## Running the app
-
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
-```
-
-## Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+**User Routes:**
+- Return all users by parameters: ` GET /users?status=1&page=1&limit=10 `
+- Return user by ID: ` GET /users/{:id} `
+- Create Admin user: ` POST /users `
+- Create user: ` POST /users/createUser `
+- Update user by ID: ` PUT /users/{:id} `
+- Delete user by ID: ` DELETE /users/{:id} `

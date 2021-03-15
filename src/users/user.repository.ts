@@ -15,7 +15,7 @@ export class UserRepository extends Repository<User> {
     queryDto.page = queryDto.page < 1 ? 1 : queryDto.page;
     queryDto.limit = queryDto.limit > 100 ? 100 : queryDto.limit;
 
-    const {id, email, name, status, role } = queryDto;
+    const {email, name, status, role } = queryDto;
     const query = this.createQueryBuilder('user');
     query.where('user.status = :status', { status });
 
@@ -63,13 +63,21 @@ export class UserRepository extends Repository<User> {
       return user;
     } catch (error) {
       if (error.code.toString() === '23505') {
-        throw new ConflictException('Endereço de email já está em uso');
+        throw new ConflictException('Email address is already in use');
       } else {
         throw new InternalServerErrorException(
-          'Erro ao salvar o usuário no banco de dados',
+          'Error saving the user in the database',
         );
       }
     }
+  }
+
+  async changePassword(id: string, password: string) {
+    const user = await this.findOne(id);
+    user.salt = await bcrypt.genSalt();
+    user.password = await this.hashPassword(password, user.salt);
+    user.recoverToken = null;
+    await user.save();
   }
 
   async checkCredentials(credentialsDto: CredentialsDto): Promise<User> {

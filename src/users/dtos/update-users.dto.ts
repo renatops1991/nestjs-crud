@@ -4,13 +4,13 @@ import { UserRole } from '../user-roles.enum';
 export class UpdateUsersDto {
   @IsOptional()
   @IsString({
-    message: 'Informe um nome de usuário válido',
+    message: 'Enter valid username',
   })
   name: string;
 
   @IsOptional()
   @IsEmail({}, {
-    message: 'Informe um endereço de email válido',
+    message: 'Enter valid email',
   })
   email: string;
 

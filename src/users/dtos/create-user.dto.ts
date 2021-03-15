@@ -1,20 +1,34 @@
 import { IsEmail, IsNotEmpty, MaxLength, MinLength } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateUserDto {
-  @IsNotEmpty({ message: 'Informe um endereço de email' })
-  @IsEmail({}, { message: 'Informe um endereço de email válido' })
-  @MaxLength(200, { message: 'O endereço de email deve ter menos de 200 caracteres' })
+  @ApiProperty({
+    type: String, description: 'Please provide a valid email address',
+  })
+  @IsNotEmpty({ message: 'Enter an email address' })
+  @IsEmail({}, { message: 'Please provide a valid email address' })
+  @MaxLength(100, { message: 'The email address must be less than 100 characters' })
   email: string;
 
-  @IsNotEmpty({ message: 'Informe o nome do usuário' })
-  @MaxLength(200, { message: 'O nome deve ter menos de 200 caracteres' })
+  @ApiProperty({
+    type: String, description: 'The name must be less than 200 characters',
+  })
+  @IsNotEmpty({ message: 'Enter the user name' })
+  @MaxLength(200, { message: 'The name must be less than 200 characters' })
   name: string;
 
-  @IsNotEmpty({ message: 'Informe um senha' })
-  @MinLength(6, { message: 'A senha deve ter no mínimo 6 caracteres' })
+  @ApiProperty({
+    type: String, description: 'Password must be at least 6 characters',
+  })
+  @IsNotEmpty({ message: 'Enter the password' })
+  @MinLength(6, { message: 'Password must be at least 6 characters' })
   password: string;
 
-  @IsNotEmpty({ message: 'Informe a confirmação de senha' })
-  @MinLength(6, { message: 'A confirmação de senha deve ter no mínimo 6 caracteres' })
+  @ApiProperty({
+    type: String,
+    description: 'Password confirmation must be at least 6 characters',
+  })
+  @IsNotEmpty({ message: 'Enter password confirmation' })
+  @MinLength(6, { message: 'Password confirmation must be at least 6 characters' })
   passwordConfirmation: string;
 }
